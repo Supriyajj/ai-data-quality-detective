@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+python-multipart
+pandas
+numpy
+python-dotenv
+pydantic
+websockets
+sentence-transformers
+faiss-cpu
+tiktoken
+anthropic
+openai

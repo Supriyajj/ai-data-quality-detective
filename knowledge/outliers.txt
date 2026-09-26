@@ -1,0 +1,25 @@
+Outliers are values that lie unusually far from the rest of the
+distribution. They are not automatically "wrong" - some are legitimate rare
+events (a genuinely high earner in a salary column), while others indicate
+data entry or measurement error (a salary that is off by a factor of 1000
+due to a currency or unit mistake).
+
+The Interquartile Range (IQR) method is a simple, distribution-agnostic way
+to flag candidates:
+  Q1 = 25th percentile, Q3 = 75th percentile
+  IQR = Q3 - Q1
+  Lower bound = Q1 - 1.5 x IQR
+  Upper bound = Q3 + 1.5 x IQR
+Any value outside [lower bound, upper bound] is flagged as a statistical
+outlier. This is a heuristic, not a certainty - always review flagged points
+before removing them.
+
+Other detection approaches (for reference, not required for a first version):
+Z-score thresholds, modified Z-score using median absolute deviation (more
+robust to extreme values than the mean-based Z-score), and model-based
+methods like isolation forests for multivariate outliers.
+
+Handling: for confirmed data errors, correct or remove the row. For
+legitimate extreme values, keep them but consider whether the downstream
+model needs a transform (e.g. log-scaling a heavily skewed salary column)
+rather than removing real signal.

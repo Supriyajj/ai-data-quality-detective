@@ -1,0 +1,21 @@
+Invalid values are entries that fall outside the logically possible range
+for a field, even though they may be well-typed (e.g. a numeric age of -5
+is a valid integer but an invalid age).
+
+Common categories:
+- Range violations: negative age, negative salary, percentages over 100.
+- Referential violations: a foreign key that does not exist in the parent
+  table (e.g. an order referencing a customer_id that was deleted).
+- Format violations: an email without an "@", a postal code with letters
+  where only digits are expected.
+- Logical/cross-field violations: an "end_date" earlier than "start_date".
+
+Root causes are usually one of: manual data entry error, a unit mismatch
+(e.g. salary entered in different currencies without conversion), a failed
+type coercion during an ETL step, or an adversarial/bot-generated record.
+
+Recommended handling: never silently overwrite invalid values with an
+imputed value without flagging them - this can hide real upstream bugs.
+Instead, quarantine the affected rows for manual review, and only apply
+automatic correction (e.g. taking the absolute value of a negative age) if
+the correction logic has been validated against a sample.

@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.env
+node_modules/
+dist/
+build/
+.vite/
+*.index
+backend/vector_cache/
+.DS_Store

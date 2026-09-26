@@ -1,0 +1,11 @@
+customer_id,age,salary,email,city,signup_date
+1001,34,54000,anna@example.com,Bengaluru,04-01-2023
+1002,29,61000,rahul@example.com,Mumbai,06-01-2023
+1003,-5,48000,,Delhi,09-01-2023
+1004,41,-2000,priya@example.com,Bengaluru,11-01-2023
+1005,34,54000,anna@example.com,Bengaluru,04-01-2023
+1006,52,720000,karan@example.com,Chennai,15-01-2023
+1007,,63000,sneha@example.com,Pune,18-01-2023
+1008,38,59500,,Mumbai,19-01-2023
+1009,27,45000,vikram@example.com,Hyderabad,22-01-2023
+1010,150,58000,ravi@example.com,Delhi,25-01-2023

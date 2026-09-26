@@ -1,0 +1,19 @@
+A data type issue occurs when a column's actual content does not match its
+expected or declared type - for example, a "date" column stored as free-text
+strings in inconsistent formats, or a numeric column that contains a mix of
+numbers and text like "N/A" or "unknown", which forces the whole column to
+be read as a generic object/string type.
+
+Common causes: CSV export tools that do not preserve types, manual data
+entry with inconsistent conventions (e.g. "03/04/2023" vs "2023-04-03"),
+and concatenation of data from multiple source systems with different
+schemas.
+
+Consequences: mixed-type columns silently break numeric operations (a sum
+or mean will error or behave unexpectedly), and inconsistent date formats
+break chronological sorting and time-based feature engineering.
+
+Recommended handling: explicitly cast each column to its intended type as
+an early pipeline step rather than relying on automatic type inference, and
+fail loudly (raise an error or flag the row) when a value cannot be parsed
+into the expected type, rather than silently coercing it to null.

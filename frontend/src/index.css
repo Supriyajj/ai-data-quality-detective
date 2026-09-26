@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root { height: 100%; }
+
+body {
+  background: #F3F4F9;
+  color: #0F172A;
+  font-family: "Times New Roman", Times, serif;
+  position: relative;
+}
+
+/* Ambient AI-observatory backdrop: soft drifting pastel color fields + a
+   faint grid, fixed behind all content so every page feels like one
+   continuous, dimensional space instead of a flat white page. */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+body::before {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(139, 92, 246, 0.14), transparent 38%),
+    radial-gradient(circle at 88% 18%, rgba(34, 211, 238, 0.12), transparent 40%),
+    radial-gradient(circle at 25% 92%, rgba(217, 70, 239, 0.09), transparent 42%),
+    radial-gradient(circle at 80% 85%, rgba(59, 130, 246, 0.10), transparent 40%);
+  animation: drift 24s ease-in-out infinite;
+}
+body::after {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 90%);
+}
+#root { position: relative; z-index: 1; }
+
+::selection { background: #8B5CF6; color: #fff; }
+
+/* Custom scrollbar - fits the light instrument-panel theme */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.25);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.5); background-clip: padding-box; }
+
+.case-tag {
+  font-family: "Courier New", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+/* Glass + AI observability card - the core visual signature of this theme */
+.card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.82));
+  border: 1px solid rgba(100, 116, 139, 0.14);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 16px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.07);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  transform-style: preserve-3d;
+}
+
+.card-hover:hover {
+  border-color: rgba(139, 92, 246, 0.35);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset, 0 24px 48px -18px rgba(15, 23, 42, 0.20), 0 0 40px -8px rgba(139, 92, 246, 0.18);
+  transform: translateY(-3px);
+}
+
+/* Subtle 3D tilt for cards that opt in - depth without needing JS mouse-tracking */
+.card-3d {
+  perspective: 1200px;
+}
+.card-3d:hover {
+  transform: perspective(1200px) rotateX(2.5deg) rotateY(-2.5deg) translateY(-4px) translateZ(6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; }
+}
+
+.status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.pulse { animation: pulse-glow 2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

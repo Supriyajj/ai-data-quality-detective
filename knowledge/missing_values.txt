@@ -1,0 +1,19 @@
+Missing values occur when a field does not contain a valid entry. Common
+causes include skipped form fields, failed data pipeline joins, opt-out
+fields (like optional phone numbers), and upstream system errors.
+
+Handling strategies, roughly in order of safety:
+1. Investigate why the value is missing before treating it - "missing" is
+   sometimes itself informative (e.g. a customer who declined to give an
+   email may be less engaged).
+2. Deletion: acceptable when missingness is rare (<5%) and appears random.
+3. Imputation: mean or median for numeric columns with roughly symmetric
+   distributions; mode for categorical columns.
+4. Domain-specific replacement: e.g. filling a missing "country" from a
+   related "phone country code" column.
+5. Flag-and-fill: fill the value AND add a boolean "was_missing" column so
+   downstream models can still use the missingness as a signal.
+
+Blindly dropping all rows with any missing value is the most common mistake -
+it silently shrinks the dataset and can introduce bias if missingness is not
+random (Missing Not At Random, MNAR).

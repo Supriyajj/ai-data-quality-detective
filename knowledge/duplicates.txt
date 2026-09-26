@@ -1,0 +1,17 @@
+Duplicate rows are records that are identical (or near-identical) to another
+record in the dataset. They typically enter a dataset through repeated form
+submissions, retried API calls, merges of multiple source systems without
+deduplication keys, or ETL jobs that re-run over already-processed data.
+
+Handling strategies:
+1. Exact duplicates (every column matches): safe to drop, keeping the first
+   or most recent occurrence depending on which is more trustworthy.
+2. Key-based duplicates (same ID, different other values): these usually
+   indicate an update was captured as a new row instead of an edit - resolve
+   by keeping the most recent timestamp, not by simple deletion.
+3. Fuzzy duplicates (near-identical, e.g. "Jon Smith" vs "Jonathan Smith"):
+   require fuzzy matching or manual review, not naive equality checks.
+
+Before deduplicating, confirm whether the duplication is a data error or a
+legitimate repeated event (e.g. a customer placing two identical orders on
+the same day is not a "duplicate row" in the data-quality sense).
