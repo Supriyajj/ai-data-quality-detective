@@ -1,4 +1,12 @@
-const BASE = "/api";
+// Local dev: "" (empty) keeps using Vite's proxy in vite.config.js.
+// Production build: falls back to PRODUCTION_BACKEND_URL below if
+// VITE_API_BASE isn't set - update that line directly whenever the tunnel
+// URL changes, then git push, instead of relying on Vercel's env var UI.
+// import.meta.env.PROD is Vite's own built-in flag (true only in a real
+// `npm run build`), so this fallback never affects local `npm run dev`.
+const PRODUCTION_BACKEND_URL = "https://arch-different-famous-charging.trycloudflare.com";
+const API_ROOT = import.meta.env.VITE_API_BASE || (import.meta.env.PROD ? PRODUCTION_BACKEND_URL : "");
+const BASE = `${API_ROOT}/api`;
 
 async function handle(res) {
   if (!res.ok) {
@@ -68,8 +76,16 @@ export function reportUrl(datasetId) {
 }
 
 export function openPipelineSocket(datasetId, onMessage, onClose) {
-  const proto = window.location.protocol === "https:" ? "wss" : "ws";
-  const ws = new WebSocket(`${proto}://${window.location.host}/ws/pipeline/${datasetId}`);
+  let wsUrl;
+  if (API_ROOT) {
+    // Production: derive ws(s):// from the configured backend's http(s):// URL.
+    wsUrl = API_ROOT.replace(/^http/, "ws") + `/ws/pipeline/${datasetId}`;
+  } else {
+    // Local dev: same-origin, proxied by Vite.
+    const proto = window.location.protocol === "https:" ? "wss" : "ws";
+    wsUrl = `${proto}://${window.location.host}/ws/pipeline/${datasetId}`;
+  }
+  const ws = new WebSocket(wsUrl);
   ws.onmessage = (evt) => onMessage(JSON.parse(evt.data));
   ws.onclose = () => onClose && onClose();
   return ws;
